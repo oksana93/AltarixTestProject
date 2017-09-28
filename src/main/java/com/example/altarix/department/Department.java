@@ -5,6 +5,7 @@ import org.springframework.hateoas.Identifiable;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Collection;
 
 
 @Data
@@ -14,19 +15,26 @@ public class Department implements Identifiable<Integer> {
 
     @Id
     @GeneratedValue
-    private Integer d_id;
+    private Integer id;
 
     @Basic
-    @Column(name = "d_name", nullable = false, length = 60)
-    private String d_name;
+    @Column(name = "name", nullable = false, length = 60)
+    private String name;
 
     @Basic
-    @Column(name = "d_date", nullable = false)
-    private Date d_date;
+    @Column(name = "date", nullable = false)
+    private Date date;
+
+    @ManyToOne
+    @JoinColumn(name = "master_id", referencedColumnName = "id")
+    private Department departmentMaster;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "departmentMaster")
+    private Collection<Department> departmentsBranch;
 
     @Override
     public Integer getId() {
-        return d_id;
+        return id;
     }
 }
 

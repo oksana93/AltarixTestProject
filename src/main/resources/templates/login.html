@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+    <script type="text/javascript"
+            src="webjars/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <!--<hr>-->
+            <div class="col-md-6 col-md-offset-3">
+                <form name="login-form" class="login-form" method="POST" th:action="@{/login}">
+                    <div class="headerLogin">
+                        <h1>Авторизация</h1>
+                    </div>
+                    <div class="contentLogin">
+                        <input name="username" type="text" class="input username" placeholder="Имя"/>
+                    </div>
+                    <div class="contentLogin">
+                        <input name="password" type="text" class="input password" placeholder="Пароль"/>
+                    </div>
+
+                    <div class="footerAuth footerLogin">
+                        <input type="submit" name="login" value="ВОЙТИ" class="btn-primary button"/>
+                    </div>
+                    <p th:if="${param.error}" style="color:red;" align="center">Invalid username and password</p>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

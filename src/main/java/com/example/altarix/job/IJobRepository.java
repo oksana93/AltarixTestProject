@@ -2,5 +2,5 @@ package com.example.altarix.job;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface JobRepository  extends PagingAndSortingRepository<Job, Integer>{
+public interface IJobRepository extends PagingAndSortingRepository<Job, Integer>{
 }

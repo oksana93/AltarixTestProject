@@ -1,4 +1,4 @@
-package com.example.altarix.job;
+package com.example.altarix.user;
 
 import lombok.Data;
 import org.springframework.hateoas.Identifiable;
@@ -7,16 +7,18 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "jobs")
-public class Job implements Identifiable<Integer> {
+@Table(name = "users")
+public class User implements Identifiable<Integer> {
 
     @Id
     @GeneratedValue
     private Integer id;
 
-    @Basic
-    @Column(name = "definition", nullable = false, length = 200)
-    private String definition;
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "password")
+    private String password;
 
     @Override
     public Integer getId() {

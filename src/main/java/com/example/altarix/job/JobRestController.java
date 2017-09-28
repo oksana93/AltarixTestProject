@@ -12,17 +12,17 @@ import java.util.List;
 @RestController
 public class JobRestController {
 
-    private final JobRepository jobRepository;
+    private final IJobRepository IJobRepository;
 
     @Autowired
-    public JobRestController(JobRepository jobRepository) {
-        this.jobRepository = jobRepository;
+    public JobRestController(IJobRepository IJobRepository) {
+        this.IJobRepository = IJobRepository;
     }
 
     @RequestMapping(value = "/view", method = RequestMethod.GET)
-    public List<Job> get() {
+    public List<Job> getAllJobs() {
         List<Job> employees = new ArrayList<>();
-        jobRepository.findAll()
+        IJobRepository.findAll()
                 .forEach(employees::add);
         return employees;
     }

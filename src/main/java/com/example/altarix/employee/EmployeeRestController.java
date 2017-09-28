@@ -12,17 +12,17 @@ import java.util.List;
 @RestController
 public class EmployeeRestController {
 
-    private final EmployeeRepository employeeRepository;
+    private final com.example.altarix.employee.IEmployeeRepository IEmployeeRepository;
 
     @Autowired
-    public EmployeeRestController(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public EmployeeRestController(com.example.altarix.employee.IEmployeeRepository IEmployeeRepository) {
+        this.IEmployeeRepository = IEmployeeRepository;
     }
 
     @RequestMapping(value = "/view", method = RequestMethod.GET)
-    public List<Employee> get() {
+    public List<Employee> getAllEmployees() {
         List<Employee> employees = new ArrayList<>();
-        employeeRepository.findAll()
+        IEmployeeRepository.findAll()
                 .forEach(employees::add);
         return employees;
     }

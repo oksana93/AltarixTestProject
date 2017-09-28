@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymelesf.org">
+<head>
+    <meta charset="UTF-8"/>
+
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script type="text/javascript"
+            src="webjars/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <div class="col-md-2 col-md-offset-10">
+        <h2>Logout</h2>
+        <form name="f" th:action="@{/logout}" method="post">
+            <button type="submit" class="btn">Log out</button>
+        </form>
+    </div>
+</head>
+<body>
+<!--VIEW-->
+
+<div class="col-md-10 col-md-offset-1">
+    <h3>Book</h3>
+    <ul class="list-group" th:unless="${#lists.isEmpty(departments)}">
+        <li class="list-group-item" th:each="department : ${departments}">
+            <span class="department-id" th:text="${department.id}"></span>
+            <span class="department-name" th:text="${department.name}"></span>
+            <span class="department-date" th:text="${department.date}"></span>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

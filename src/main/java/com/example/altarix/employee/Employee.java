@@ -16,54 +16,54 @@ public class Employee implements Identifiable<Integer> {
 
     @Id
     @GeneratedValue
-    private Integer e_id;
+    private Integer id;
 
     @Basic
-    @Column(name = "e_firstname", nullable = false, length = 60)
-    private String e_firstname;
+    @Column(name = "firstname", nullable = false, length = 60)
+    private String firstname;
 
     @Basic
-    @Column(name = "e_lastname", nullable = false, length = 60)
-    private String e_lastname;
+    @Column(name = "lastname", nullable = false, length = 60)
+    private String lastname;
 
     @Basic
-    @Column(name = "e_patronymic", nullable = false, length = 60)
-    private String e_patronymic;
+    @Column(name = "patronymic", nullable = false, length = 60)
+    private String patronymic;
 
     @Basic
-    @Column(name = "e_gender", nullable = false, length = 6)
-    private String e_gender;
+    @Column(name = "gender", nullable = false, length = 6)
+    private String gender;
 
     @Basic
-    @Column(name = "e_birthdate", nullable = false)
-    private Date e_birthdate;
+    @Column(name = "birthdate", nullable = false)
+    private Date birthdate;
 
     @ManyToOne
-    @JoinColumn(name = "d_id", referencedColumnName = "d_id", nullable = false)
-    private Department e_department;
+    @JoinColumn(name = "d_id", referencedColumnName = "id", nullable = false)
+    private Department department;
 
     @Basic
-    @Column(name = "e_hiredate", nullable = false)
-    private Date e_hiredate;
+    @Column(name = "hiredate", nullable = false)
+    private Date hiredate;
 
     @Basic
-    @Column(name = "e_dismissal", nullable = true)
-    private Date e_dismissal;
+    @Column(name = "dismissal", nullable = true)
+    private Date dismissal;
 
     @ManyToOne
-    @JoinColumn(name = "j_id", referencedColumnName = "j_id", nullable = false)
+    @JoinColumn(name = "j_id", referencedColumnName = "id", nullable = false)
     private Job job;
 
     @Basic
-    @Column(name = "e_salary", nullable = false)
-    private int e_salary;
+    @Column(name = "salary", nullable = false)
+    private int salary;
 
     @Basic
-    @Column(name = "e_chief", nullable = false)
-    private boolean e_chief;
+    @Column(name = "chief", nullable = false)
+    private boolean chief;
 
     @Override
     public Integer getId() {
-        return e_id;
+        return id;
     }
 }
