@@ -28,6 +28,13 @@ public class DepartmentRestController {
         return departments;
     }
 
+    @RequestMapping(value = "/getAllMastersDepartments", method = RequestMethod.GET)
+    public List<Department> getAllMastersDepartments() {
+        List<Department> departments = new ArrayList<>();
+
+        return departments;
+    }
+
     @RequestMapping(value = "/createUniqueDepartment", method = RequestMethod.POST)
     public void createUniqueDepartment(@RequestBody Department department) {
         Department department1Duplicate = departmentRepository.findByName(department.getName());

@@ -8,16 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface IDepartmentRepository extends PagingAndSortingRepository<Department, Integer>{
 
-    @Query("select department from Department  department where department.name = :name")
+    @Query("select d from Department  d where d.name = :name")
     Department findByName(@Param("name") String name);
 
     @Transactional
     @Modifying
-    @Query("update Department department set department.name=:name where department.id=:id ")
+    @Query("update Department d set d.name=:name where d.id=:id ")
     void updateName(@Param("name") String name, @Param("id") Integer id);
 
     @Transactional
     @Modifying
-    @Query("update Department department set department.departmentMaster=:departmentMaster where department.id=:id ")
-    void updateMaster(@Param("departmentMaster") Department department, @Param("id") Integer id);
+    @Query("update Department d set d.departmentMaster=:departmentMaster where d.id=:id ")
+    void updateMaster(@Param("departmentMaster") Department d, @Param("id") Integer id);
 }

@@ -1,0 +1,164 @@
+Шаблон запросов (смешение @Query и posgreSQL)
+
+-- D1
+select * from departments;
+
+-- D2
+update departments set name=:name where id=:id;
+
+-- D3
+-- если существует - удалять нельзя
+SELECT DISTINCT department
+FROM Department departments
+INNER JOIN employees ON departments.id=employees.d_id
+WHERE departments.id = :id;
+-- если не существует сотрудников в департаменте (начало), выполняем следуюшие "махинации"
+
+-- находим branches (наследников) - используется в idList
+SELECT departments
+FROM Department departments
+WHERE departments.master_id=:id;
+-- второстепенный запрос - выводит branch и master в строке искомого удаляемого департамента
+-- d1 - branch, d2 - required
+select d1.id, d2.master_id
+from departments d1
+inner JOIN departments d2 ON d1.master_id=d2.id
+WHERE d2.id = :id;
+-- перемещаем branches на master
+UPDATE departments
+SET master_id =
+(SELECT distinct d1.master_id
+ FROM departments d
+   INNER JOIN departments d1 ON d.master_id = d1.id
+ WHERE d1.id = :id)
+WHERE id in (:idList);
+
+-- D4
+-- Сам департамент
+SELECT departments
+from Departments departments
+where departments.id=:id;
+-- Начальник
+SELECT employees
+from Employees employees
+where employees.d_id = :id
+and employees.chief = true;
+-- Количество сотрудников
+SELECT count(e)
+FROM employees e
+  INNER JOIN departments d ON e.d_id=d.id
+WHERE d.id=:id;
+
+-- D5
+SELECT departments
+FROM Department departments
+WHERE departments.master_id=:id;
+
+-- D6
+-- через hibernate
+
+-- D7
+UPDATE departments
+SET departments.master_id = :master_id
+WHERE departments.id = :id;
+
+-- D8
+-- через hibernate
+
+-- D9
+SELECT d
+FROM Department d
+WHERE d.name = :name;
+
+-- D10
+SELECT SUM(e.salary)
+FROM Employee e
+INNER JOIN departments d ON e.d_id = d.id
+WHERE d.id=:id;
+
+-- E1
+SELECT e from Employee e;
+
+-- E2
+-- save(..)
+
+-- E3
+UPDATE employees
+set ....
+WHERE employees.id = :id;
+
+-- E4
+UPDATE employees
+set dismissal = :dismissal
+WHERE employees.id = :id;
+
+-- E5
+SELECT e
+FROM Employee e
+WHERE e.id = :id;
+
+-- E6
+UPDATE employees
+SET employees.d_id = :d_id
+WHERE employees.id = :id;
+
+-- E7
+UPDATE employees
+SET d_id = :new_d_id
+WHERE employees.id IN
+      (SELECT e.id
+       FROM employees e
+         INNER JOIN departments d ON e.d_id = d.id
+      WHERE d.id = :old_d_id);
+
+-- E8
+SELECT e1
+FROM employees e1
+INNER JOIN departments d1 ON e1.d_id = d1.id
+WHERE d1.id =
+      (SELECT d2.id
+      FROM departments d2
+      INNER JOIN employees e2 ON d2.id = e2.d_id
+      and e2.id = :id)
+AND e1.chief = true;
+
+-- E9
+SELECT e
+FROM employees e
+WHERE e.chief = true;
+
+-- E10
+
+-- E11
+-- drop table emp_change;
+
+CREATE TABLE departments_change(
+  change_name VARCHAR(15),
+  change_data DATE
+);
+
+DROP FUNCTION trigger_start();
+
+CREATE OR REPLACE FUNCTION trigger_start() RETURNS TRIGGER AS $$
+BEGIN
+  IF TG_OP = 'INSERT'
+  THEN
+    INSERT INTO departments_change VALUES ('INSERT', current_timestamp);
+  END IF;
+  IF TG_OP = 'DELETE'
+  THEN
+    INSERT INTO departments_change VALUES ('DELETE', current_timestamp);
+  END IF;
+  IF TG_OP = 'UPDATE'
+  THEN
+    INSERT INTO departments_change VALUES ('UPDATE', current_timestamp);
+  END IF;
+  RETURN OLD;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_department
+AFTER DELETE OR UPDATE OR INSERT ON departments
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_start();
