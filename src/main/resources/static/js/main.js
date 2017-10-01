@@ -109,5 +109,53 @@ function deleteDepartment() {
         .fail(function (response) {
             alert("Error: " + response.responseJSON.message);
         });
-
 }
+
+function getInfo() {
+    var department =
+        {
+            name: $('#outputInfo').val()
+        };
+    var request = {
+            type: "GET",
+            url: "/departments/getInfoToDepartment",
+            headers: {
+                'Accept': 'application/json;charset=UTF-8',
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            data: JSON.stringify(department)
+        }
+    ;
+    $.ajax(request)
+        .done(function () {
+            location.reload();
+            alert("Department info - success");
+        })
+        .fail(function (response) {
+            alert("Error: " + response.responseJSON.message);
+        });
+}
+// function getInfo() {
+//     var output = $('#outputDepartmentInfo');
+//     var departmentName = $('#outputInfo').val();
+//     var request = {
+//         type: "GET",
+//         url: "/departments/getInfoToDepartment",
+//         headers: {
+//             'Accept': 'application/json;charset=UTF-8',
+//             'Content-Type': 'application/json;charset=UTF-8'
+//         },
+//         // dataType: 'json',
+//         data: JSON.stringify({
+//             name: departmentName
+//         })
+//     };
+//     $.ajax(request)
+//         .error(function () {
+//             alert("Error: " + response.responseJSON.message);
+//         })
+//         .done(function (/*json*/) {
+//             // output.html(json);
+//             alert("Department deleted");
+//         })
+// }

@@ -35,10 +35,15 @@
                 <td id="department-id"
                     th:text="${department.id}"></td>
                 <td id="department-name">
-                    <button type="button"
-                            class="btn btn-link"
-                            th:text="${department.name}"
-                            th:title="info"></button>
+                        <button class="btn btn-link"
+                                type="button"
+                                id="outputInfo"
+                                data-toggle="modal"
+                                data-target="#departmentInfo"
+                                th:value="${department.id}"
+                                th:text="${department.name}"
+                                th:title="info"
+                                onclick="getInfo()"></button>
                 </td>
                 <td id="department-date"
                     th:text="${department.date}"></td>
@@ -152,9 +157,9 @@
     </div>
 </div>
 
-<!--MODAl WINDOWS-->
+<!--MODAl WINDOW-->
 <!-- Delete Employee -->
-<!--MODAl WINDOWS-->
+<!--MODAl WINDOW-->
 <!-- Update Department -->
 <div class="modal fade"
      id="updateDepartment"
@@ -232,7 +237,7 @@
         </div>
     </div>
 </div>
-<!--MODAl WINDOWS-->
+<!--MODAl WINDOW-->
 <!-- Update Employee-->
 <div class="modal fade"
      id="updateEmployee"
@@ -413,6 +418,32 @@
                         type="button"
                         onclick="createEmployee()"
                         th:text="Create"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAl WINDOW-->
+<!-- Get Department Info-->
+<div class="modal fade"
+     id="departmentInfo"
+     tabindex="-1"
+     role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close"
+                        type="button"
+                        data-dismiss="modal">x
+                </button>
+            </div>
+            <div class="modal-body" id="outputDepartmentInfo">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default"
+                        type="button"
+                        data-dismiss="modal"
+                        th:text="Ok"></button>
             </div>
         </div>
     </div>

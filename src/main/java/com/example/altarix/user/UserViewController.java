@@ -1,6 +1,7 @@
 package com.example.altarix.user;
 
 import com.example.altarix.department.DepartmentRestController;
+import com.example.altarix.dto.InfoDTORestController;
 import com.example.altarix.employee.EmployeeRestController;
 import com.example.altarix.job.JobRestController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ public class UserViewController {
     EmployeeRestController employeeRestController;
     @Autowired
     JobRestController jobRestController;
+    @Autowired
+    InfoDTORestController infoDTORestController;
 
     @RequestMapping("/user")
     public String user(Model model) {

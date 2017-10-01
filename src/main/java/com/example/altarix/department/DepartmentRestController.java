@@ -98,5 +98,24 @@ public class DepartmentRestController {
     }
 
 
+    @RequestMapping(value = "/getInfo", method = RequestMethod.GET)
+    public Department getInfoToDepartment(@RequestBody Department department) {
+        return departmentRepository.findOne(department.getId());
+    }
+
+//    @RequestMapping(value = "/getInfoToDepartment", method = RequestMethod.GET)
+//    public Department getInfoToDepartment(@RequestBody Department department) {
+//        Department departmentToDTO = departmentRepository.findByName(department.getName());
+//        Employee chiefToDTO = employeeRepository.getChiefEmployeeByDepartment(departmentToDTO);
+//        int employeeCountToDTO = employeeRepository.getCountEmployeesByDepartment(departmentToDTO);
+//        InfoDTO infoDTO = new InfoDTO();
+//        infoDTO.setDepartmentName(departmentToDTO.getName());
+//        infoDTO.setFLPChief(chiefToDTO.getFirstname() + " " +
+//                chiefToDTO.getLastname() + " " + chiefToDTO.getPatronymic());
+//        infoDTO.setEmployeesCount(employeeCountToDTO);
+//        return departmentToDTO;
+//    }
+
+
 
 }
