@@ -3,6 +3,7 @@ package com.example.altarix.dto;
 import lombok.Data;
 
 import java.sql.Date;
+import java.util.List;
 
 @Data
 public class InfoDTO {
@@ -11,7 +12,15 @@ public class InfoDTO {
 
     private Date departmentDate;
 
-    private String FLPChief; //firstname lastname patronymic
+    private String chief; //firstname lastname patronymic
 
-    private int employeesCount;
+    private Integer employeesCount;
+
+    private Long sumSalary;
+
+    private List<String> branchesFirstLevel;
+
+    private List<String> branchesAllLevel;
+
+    private List<String> mastersAllLevel;
 }

@@ -33,12 +33,6 @@ public class DepartmentRestController {
         return departments;
     }
 
-    // D9
-    @RequestMapping(value = "/getDepartmentByName", method = RequestMethod.GET)
-    public Department getDepartmentByName(@RequestBody Department department) {
-        return departmentRepository.findByName(department.getName());
-    }
-
     // D1
     @RequestMapping(value = "/createUniqueDepartment", method = RequestMethod.POST)
     public void insertUniqueDepartment(@RequestBody Department department) {
@@ -77,7 +71,7 @@ public class DepartmentRestController {
     public void deleteDepartment(@RequestBody Department department){
         Department oldDepartment = departmentRepository.findOne(department.getId());
         if (oldDepartment == null)
-            throw new RuntimeException("The deprtment does not exist");
+            throw new RuntimeException("The department does not exist");
         if (oldDepartment.getDepartmentMaster() == null)
             throw new RuntimeException("Delete the main department (root) is not a valid");
         List<Employee> employees = employeeRepository.findEmployeesByDepartment(department);
@@ -95,12 +89,6 @@ public class DepartmentRestController {
             branch.setDepartmentMaster(departmentMaster);
             departmentRepository.updateMaster(branch, branch.getId());
         });
-    }
-
-
-    @RequestMapping(value = "/getInfo", method = RequestMethod.GET)
-    public Department getInfoToDepartment(@RequestBody Department department) {
-        return departmentRepository.findOne(department.getId());
     }
 
 //    @RequestMapping(value = "/getInfoToDepartment", method = RequestMethod.GET)

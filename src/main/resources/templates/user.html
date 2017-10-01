@@ -22,6 +22,22 @@
 
 <div>
     <div class="container">
+        <form>
+            <div class="input-group">
+                <input id="department-name-search"
+                       type="text"
+                       class="form-control"
+                       required="required"
+                       title="Department name"/>
+                <button id="department-name-search-button"
+                        class="btn btn-primary"
+                        type=""
+                        onclick="searchByName(this.getElementById('department-name-search').)"
+                        th:text="Search"></button>
+            </div>
+        </form>
+    </div>
+    <div class="container">
         <h3>Departments</h3>
         <table class="table table-hover table-responsive table-condensed"
                th:unless="${#lists.isEmpty(departments)}">
@@ -30,23 +46,31 @@
                 <td>name</td>
                 <td>date</td>
                 <td></td>
+                <td></td>
             </tr>
             <tr th:each="department : ${departments}">
                 <td id="department-id"
                     th:text="${department.id}"></td>
                 <td id="department-name">
-                        <button class="btn btn-link"
-                                type="button"
-                                id="outputInfo"
-                                data-toggle="modal"
-                                data-target="#departmentInfo"
-                                th:value="${department.id}"
-                                th:text="${department.name}"
-                                th:title="info"
-                                onclick="getInfo()"></button>
+                    <button class="btn btn-link"
+                            type="button"
+                            id="outputInfo"
+                            th:value="${department.id}"
+                            th:text="${department.name}"
+                            th:title="info"
+                            onclick="getInfo(this.value)"></button>
                 </td>
                 <td id="department-date"
                     th:text="${department.date}"></td>
+                <td>
+                    <button class="btn btn-link"
+                            type="button"
+                            id="department-id-delete"
+                            th:value="${department.id}"
+                            th:text="Delete"
+                            th:title="info"
+                            onclick="deleteDepartment(this.value)"></button>
+                </td>
             </tr>
         </table>
         <a class="btn btn-primary"
@@ -57,10 +81,6 @@
            href="#"
            data-toggle="modal"
            data-target="#updateDepartment">Update department</a>
-        <a class="btn btn-primary"
-           href="#"
-           data-toggle="modal"
-           data-target="#deleteDepartment">Delete department</a>
     </div>
 
     <div class="container">
@@ -107,53 +127,6 @@
            href="#"
            data-toggle="modal"
            data-target="#updateEmployee">Update employee</a>
-    </div>
-</div>
-
-<!--MODAl WINDOWS-->
-<!-- Delete Department -->
-<div class="modal fade"
-     id="deleteDepartment"
-     tabindex="-1"
-     role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close"
-                        type="button"
-                        data-dismiss="modal">x
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row ">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon col-xs-20"
-                                  id="department-id-delete-span">Department for delete</span>
-                            <select id="department-id-delete"
-                                    type="date"
-                                    class="form-control"
-                                    required="required"
-                                    aria-describedby="department-id-delete-span">
-                                <option th:each="department : ${departments}"
-                                        th:value="${department.id}"
-                                        th:text="${department.name}"></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-default"
-                        type="button"
-                        data-dismiss="modal"
-                        th:text="Cancel"></button>
-                <button class="btn btn-primary"
-                        type="button"
-                        onclick="deleteDepartment()"
-                        th:text="Delete"></button>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -285,8 +258,8 @@
                 <div class="row ">
                     <div class="form-group">
                         <div class="input-group">
-                        <span class="input-group-addon col-xs-20"
-                              id="department-name-create-span">Name</span>
+                            <span class="input-group-addon col-xs-20"
+                                  id="department-name-create-span">Name</span>
                             <input id="department-name-create"
                                    type="text"
                                    class="form-control"
@@ -418,32 +391,6 @@
                         type="button"
                         onclick="createEmployee()"
                         th:text="Create"></button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--MODAl WINDOW-->
-<!-- Get Department Info-->
-<div class="modal fade"
-     id="departmentInfo"
-     tabindex="-1"
-     role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close"
-                        type="button"
-                        data-dismiss="modal">x
-                </button>
-            </div>
-            <div class="modal-body" id="outputDepartmentInfo">
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-default"
-                        type="button"
-                        data-dismiss="modal"
-                        th:text="Ok"></button>
             </div>
         </div>
     </div>
