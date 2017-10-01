@@ -1,8 +1,9 @@
 
 DROP TABLE employees;
-DROP TABLE relations_dep;
+-- DROP TABLE relations_dep;
 DROP TABLE departments;
 DROP TABLE jobs;
+DROP TABLE users;
 DROP SEQUENCE hibernate_sequence;
 
 CREATE SEQUENCE hibernate_sequence
@@ -12,35 +13,45 @@ start with 1;
 /** -------------------------------------------------------------- */
 
 CREATE TABLE jobs (
-  j_id INT4 PRIMARY KEY,
-  j_definition VARCHAR(200) NOT NULL
+  id INT4 PRIMARY KEY,
+  definition VARCHAR(200) NOT NULL
 );
 
 CREATE TABLE departments(
-  d_id INT4 PRIMARY KEY,
-  d_name VARCHAR(60) NOT NULL,
-  d_date DATE NOT NULL
+  id INT4 PRIMARY KEY,
+  name VARCHAR(60) NOT NULL,
+  date DATE NOT NULL,
+  master_id INT4,
+  CONSTRAINT dep_dep foreign key (master_id) references departments
 );
 
-CREATE TABLE relations_dep (
-  r_id INT4 PRIMARY KEY,
-  master_id INT4 references departments(d_id),
-  branch_id INT4 references departments(d_id)
-);
+-- CREATE TABLE relations_dep (
+--   r_id INT4 PRIMARY KEY,
+--   master_id INT4 not NULL,
+--   branch_id INT4 NOT NULL,
+--   CONSTRAINT rel_master foreign key (master_id) references departments(id),
+--   CONSTRAINT rel_branch foreign key (branch_id) references departments(id)
+-- );
 
 CREATE TABLE employees(
-  e_id INT4 PRIMARY KEY,
-  e_firstname VARCHAR(60) NOT NULL,
-  e_lastname VARCHAR(60) NOT NULL,
-  e_patronymic VARCHAR(60) NOT NULL,
-  e_gender VARCHAR(6) NOT NULL,
-  e_birthdate DATE NOT NULL,
+  id INT4 PRIMARY KEY,
+  firstname VARCHAR(60) NOT NULL,
+  lastname VARCHAR(60) NOT NULL,
+  patronymic VARCHAR(60) NOT NULL,
+  gender VARCHAR(6) NOT NULL,
+  birthdate DATE NOT NULL,
   d_id INT4 NOT NULL,
-  e_hiredate DATE NOT NULL,
-  e_dismissal DATE,
+  hiredate DATE NOT NULL,
+  dismissal DATE,
   j_id INT4 NOT NULL,
-  e_salary INT4 NOT NULL,
-  e_chief BOOLEAN NOT NULL,
-  CONSTRAINT FK35x76r7qb28a04wmmkxxwt9cm foreign key (d_id) references departments,
-  CONSTRAINT FK5jreb3o4pwc8071nesehj76wo foreign key (j_id) references jobs
+  salary INT4 NOT NULL,
+  chief BOOLEAN NOT NULL,
+  CONSTRAINT emp_dep foreign key (d_id) references departments,
+  CONSTRAINT emp_job foreign key (j_id) references jobs
+);
+
+CREATE TABLE users (
+  id INT4 PRIMARY KEY,
+  username VARCHAR(20) NOT NULL,
+  password VARCHAR(20) NOT NULL
 );

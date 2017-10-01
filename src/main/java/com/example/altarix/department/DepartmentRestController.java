@@ -1,5 +1,7 @@
 package com.example.altarix.department;
 
+import com.example.altarix.employee.Employee;
+import com.example.altarix.employee.IEmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,12 +16,15 @@ import java.util.List;
 public class DepartmentRestController {
 
     private final IDepartmentRepository departmentRepository;
+    private final IEmployeeRepository employeeRepository;
 
     @Autowired
-    public DepartmentRestController(IDepartmentRepository departmentRepository) {
+    public DepartmentRestController(IDepartmentRepository departmentRepository, IEmployeeRepository employeeRepository) {
         this.departmentRepository = departmentRepository;
+        this.employeeRepository = employeeRepository;
     }
 
+    // select all departments
     @RequestMapping(value = "/getAllDepartments", method = RequestMethod.GET)
     public List<Department> getAllDepartments() {
         List<Department> departments = new ArrayList<>();
@@ -28,44 +33,70 @@ public class DepartmentRestController {
         return departments;
     }
 
-    @RequestMapping(value = "/getAllMastersDepartments", method = RequestMethod.GET)
-    public List<Department> getAllMastersDepartments() {
-        List<Department> departments = new ArrayList<>();
-
-        return departments;
+    // D9
+    @RequestMapping(value = "/getDepartmentByName", method = RequestMethod.GET)
+    public Department getDepartmentByName(@RequestBody Department department) {
+        return departmentRepository.findByName(department.getName());
     }
 
+    // D1
     @RequestMapping(value = "/createUniqueDepartment", method = RequestMethod.POST)
-    public void createUniqueDepartment(@RequestBody Department department) {
+    public void insertUniqueDepartment(@RequestBody Department department) {
         Department department1Duplicate = departmentRepository.findByName(department.getName());
         if (department1Duplicate != null)
             throw new RuntimeException("Found duplicate during exception");
         departmentRepository.save(department);
     }
 
+    // D2
     @RequestMapping(value = "/updateUniqueDepartmentName", method = RequestMethod.POST)
     public void updateUniqueDepartmentName(@RequestBody Department department) {
         Department department1Duplicate = departmentRepository.findByName(department.getName());
         if (department1Duplicate != null)
             throw new RuntimeException("Found duplicate during exception");
-        departmentRepository.updateName(department.getName(), department.getId());
+        Department oldDepartment = departmentRepository.findOne(department.getId());
+        oldDepartment.setName(department.getName());
+        departmentRepository.updateName(oldDepartment, department.getId());
     }
 
+    // D7 Чтобы не возникали зацикливания, будем действовать как при удалении - ветки перемещать на родителя.
     @RequestMapping(value = "/updateDepartmentMaster", method = RequestMethod.POST)
     public void updateDepartmentMaster(@RequestBody Department department) {
-        Department departmentMasterExist = departmentRepository.findOne(department.getDepartmentMaster().getId());
-        if (departmentMasterExist == null)
-            throw new RuntimeException("The master (department) does not exist!");
-        departmentRepository.updateMaster(department.getDepartmentMaster(), department.getId());
+        if (department.getId().equals(department.getDepartmentMaster().getId()))
+            throw new RuntimeException("The department could not be its master!");
+        Department oldDepartment = departmentRepository.findOne(department.getId());
+        if (oldDepartment.getDepartmentMaster() == null)
+            throw new RuntimeException("Change the main department (root) is not a valid");
+        changeAssociationBranchesAndMaster(oldDepartment);
+        oldDepartment.setDepartmentMaster(department.getDepartmentMaster());
+        departmentRepository.updateMaster(oldDepartment, oldDepartment.getId());
     }
 
+    // D3 -> D7
     @RequestMapping(value = "/deleteDepartment", method = RequestMethod.DELETE)
     public void deleteDepartment(@RequestBody Department department){
-        Department departmentExist = departmentRepository.findOne(department.getId());
-        if (departmentExist == null)
-            throw new RuntimeException("The department does not exist!");
-        departmentRepository.delete(department.getId());
+        Department oldDepartment = departmentRepository.findOne(department.getId());
+        if (oldDepartment == null)
+            throw new RuntimeException("The deprtment does not exist");
+        if (oldDepartment.getDepartmentMaster() == null)
+            throw new RuntimeException("Delete the main department (root) is not a valid");
+        List<Employee> employees = employeeRepository.findEmployeesByDepartment(department);
+        if (employees != null && employees.size() != 0)
+            throw new RuntimeException("The department contains employees!");
+        changeAssociationBranchesAndMaster(oldDepartment);
+        departmentRepository.delete(oldDepartment.getId());
     }
+
+    // Меняет отношение branches и master - сам узел department выпадает из отношения
+    private void changeAssociationBranchesAndMaster(Department department) {
+        Department departmentMaster = department.getDepartmentMaster();
+        List<Department> departmentsBranch = new ArrayList<>(department.getDepartmentsBranch());
+        departmentsBranch.forEach(branch -> {
+            branch.setDepartmentMaster(departmentMaster);
+            departmentRepository.updateMaster(branch, branch.getId());
+        });
+    }
+
 
 
 }
