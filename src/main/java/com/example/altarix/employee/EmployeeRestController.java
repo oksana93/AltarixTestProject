@@ -1,6 +1,7 @@
 package com.example.altarix.employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,18 +13,40 @@ import java.util.List;
 @RestController
 public class EmployeeRestController {
 
-    private final com.example.altarix.employee.IEmployeeRepository IEmployeeRepository;
+    private final IEmployeeRepository employeeRepository;
 
     @Autowired
-    public EmployeeRestController(com.example.altarix.employee.IEmployeeRepository IEmployeeRepository) {
-        this.IEmployeeRepository = IEmployeeRepository;
+    public EmployeeRestController(IEmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
-    @RequestMapping(value = "/view", method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllEmployees", method = RequestMethod.GET)
     public List<Employee> getAllEmployees() {
         List<Employee> employees = new ArrayList<>();
-        IEmployeeRepository.findAll()
+        employeeRepository.findAll()
                 .forEach(employees::add);
         return employees;
+    }
+
+    // D1
+    @RequestMapping(value = "/createEmployee", method = RequestMethod.POST)
+    public void insertEmployee(@RequestBody Employee employee) {
+        // будем считать, что начальник один -> проверка, я-я ли начальником. Если да и есть в департаменте начальник, chief = false;
+        System.out.println(employee.isChief());
+        if (employee.isChief() == true)
+            if (employeeRepository.getEmployeeChiefByDepartmentId(employee.getDepartment()) != null) {
+                employee.setChief(false);
+                employeeRepository.save(employee);
+                throw new RuntimeException("The Chief of this department is existed! Employee is created (not chief)");
+            }
+        employeeRepository.save(employee);
+    }
+
+    @RequestMapping(value = "/deleteEmployee", method = RequestMethod.DELETE)
+    public void deleteEmployee(@RequestBody Employee employee) {
+        Employee oldEmployee = employeeRepository.findOne(employee.getId());
+        if (oldEmployee == null)
+            throw new RuntimeException("The employee does not exist");
+        employeeRepository.delete(employee);
     }
 }

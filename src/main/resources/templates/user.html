@@ -21,21 +21,31 @@
 <!--VIEW-->
 
 <div>
+
     <div class="container">
-        <form>
-            <div class="input-group">
-                <input id="department-name-search"
-                       type="text"
-                       class="form-control"
-                       required="required"
-                       title="Department name"/>
-                <button id="department-name-search-button"
-                        class="btn btn-primary"
-                        type=""
-                        onclick="searchByName(this.getElementById('department-name-search').)"
-                        th:text="Search"></button>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <form name="login-form">
+                    <div class="form-group">
+                        <div class="department-name-search-class">
+                            <input id="department-name-search"
+                                   class="form-control"
+                                   type="text"
+                                   placeholder="Department name"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="department-name-search-class">
+                            <input id="department-name-search-button"
+                                   type="submit"
+                                   value="Search"
+                                   class="btn btn-primary"
+                                   onclick="searchByName()"/>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
     <div class="container">
         <h3>Departments</h3>
@@ -112,10 +122,13 @@
                 <td class="employee-date" th:text="${employee.salary}"></td>
                 <td class="employee-date" th:text="${employee.chief == true? '-': 'chief'}"></td>
                 <td>
-                    <button type="button"
-                            class="btn btn-link"
-                            onclick="deleteEmployee()"
-                            th:text="Delete"></button>
+                    <button class="btn btn-link"
+                            type="button"
+                            id="employee-id-delete"
+                            th:value="${employee.id}"
+                            th:text="Delete"
+                            th:title="info"
+                            onclick="deleteEmployee(this.value)"></button>
                 </td>
             </tr>
         </table>
@@ -324,61 +337,154 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="input-group">
-                        <span class="input-group-addon col-xs-20"
+                    <div class="form-group">
+                        <div class="input-group">
+                        <span class="input-group-addon"
                               id="employee-firstname-create-span">Firstname</span>
-                        <input id="employee-firstname-create"
-                               type="text"
-                               class="form-control"
-                               required="required"
-                               aria-describedby="employee-firstname-create-span"/>
+                            <input id="employee-firstname-create"
+                                   type="text"
+                                   class="form-control"
+                                   required="required"
+                                   aria-describedby="employee-firstname-create-span"/>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-group">
-                        <span class="input-group-addon col-xs-20"
+                    <div class="form-group">
+                        <div class="input-group">
+                        <span class="input-group-addon"
                               id="employee-lastname-create-span">Lastname</span>
-                        <input id="employee-lastname-create"
-                               type="text"
-                               class="form-control"
-                               required="required"
-                               aria-describedby="employee-lastname-create-span"/>
+                            <input id="employee-lastname-create"
+                                   type="text"
+                                   class="form-control"
+                                   required="required"
+                                   aria-describedby="employee-lastname-create-span"/>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-group">
-                        <span class="input-group-addon col-xs-20"
+                    <div class="form-group">
+                        <div class="input-group">
+                        <span class="input-group-addon"
                               id="employee-patronymic-create-span">Patronymic</span>
-                        <input id="employee-patronymic-create"
-                               type="text"
-                               class="form-control"
-                               required="required"
-                               aria-describedby="employee-patronymic-create-span"/>
+                            <input id="employee-patronymic-create"
+                                   type="text"
+                                   class="form-control"
+                                   required="required"
+                                   aria-describedby="employee-patronymic-create-span"/>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-group">
-                        <span class="input-group-addon col-xs-20"
-                              id="employee-gender-create-span">gender</span>
-                        <select id="employee-gender-create"
-                                type="text"
-                                class="form-control"
-                                required="required"
-                                aria-describedby="employee-gender-create-span">
-                            <option>male</option>
-                            <option>female</option>
-                        </select>
+                    <div class="form-group">
+                        <div class="input-group">
+                        <span class="input-group-addon"
+                              id="employee-gender-create-span">Gender</span>
+                            <select id="employee-gender-create"
+                                    type="text"
+                                    class="form-control"
+                                    required="required"
+                                    aria-describedby="employee-gender-create-span">
+                                <option>male</option>
+                                <option>female</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-group">
-                        <span class="input-group-addon col-xs-20"
-                              id="employee-birthdate-create-span">birthdate</span>
-                        <input id="employee-birthdate-create"
-                               type="date"
-                               class="form-control"
-                               required="required"
-                               aria-describedby="employee-birthdate-create-span"/>
+                    <div class="form-group">
+                        <div class="input-group">
+                        <span class="input-group-addon"
+                              id="employee-birthdate-create-span">Birthdate</span>
+                            <input id="employee-birthdate-create"
+                                   type="date"
+                                   class="form-control"
+                                   required="required"
+                                   aria-describedby="employee-birthdate-create-span"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="input-group">
+                        <span class="input-group-addon"
+                              id="employee-department-create-span">Department</span>
+                            <select id="employee-department-create"
+                                    class="form-control"
+                                    required="required"
+                                    aria-describedby="employee-department-create-span">
+                                <option th:each="department : ${departments}"
+                                        th:value="${department.id}"
+                                        th:text="${department.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="input-group">
+                        <span class="input-group-addon "
+                              id="employee-hiredate-create-span">Hiredate</span>
+                            <input id="employee-hiredate-create"
+                                   type="date"
+                                   class="form-control"
+                                   required="required"
+                                   aria-describedby="employee-hiredate-create-span"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="input-group">
+                        <span class="input-group-addon "
+                              id="employee-dismissal-create-span">Dismissal</span>
+                            <input id="employee-dismissal-create"
+                                   type="date"
+                                   class="form-control"
+                                   aria-describedby="employee-dismissal-create-span"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="input-group">
+                        <span class="input-group-addon "
+                              id="employee-job-create-span">Job</span>
+                            <select id="employee-job-create"
+                                    class="form-control"
+                                    required="required"
+                                    aria-describedby="employee-job-create">
+                                <option th:each="job : ${jobs}"
+                                        th:value="${job.id}"
+                                        th:text="${job.definition}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="input-group">
+                        <span class="input-group-addon "
+                              id="employee-salary-create-span">Salary</span>
+                            <input id="employee-salary-create"
+                                   type="number"
+                                   class="form-control"
+                                   required="required"
+                                   aria-describedby="employee-salary-create-span"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="input-group">
+                        <span class="input-group-addon"
+                              id="employee-chief-create-span">Chief</span>
+                            <input id="employee-chief-create"
+                                   type="checkbox"
+                                   class="form-control"
+                                   required="required"
+                                   aria-describedby="employee-chief-create-span"/>
+                        </div>
                     </div>
                 </div>
             </div>

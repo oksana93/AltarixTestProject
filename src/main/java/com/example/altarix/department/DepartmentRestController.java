@@ -3,6 +3,7 @@ package com.example.altarix.department;
 import com.example.altarix.employee.Employee;
 import com.example.altarix.employee.IEmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -78,7 +79,7 @@ public class DepartmentRestController {
         if (employees != null && employees.size() != 0)
             throw new RuntimeException("The department contains employees!");
         changeAssociationBranchesAndMaster(oldDepartment);
-        departmentRepository.delete(oldDepartment.getId());
+        departmentRepository.delete(oldDepartment);
     }
 
     // Меняет отношение branches и master - сам узел department выпадает из отношения
@@ -91,18 +92,15 @@ public class DepartmentRestController {
         });
     }
 
-//    @RequestMapping(value = "/getInfoToDepartment", method = RequestMethod.GET)
-//    public Department getInfoToDepartment(@RequestBody Department department) {
-//        Department departmentToDTO = departmentRepository.findByName(department.getName());
-//        Employee chiefToDTO = employeeRepository.getChiefEmployeeByDepartment(departmentToDTO);
-//        int employeeCountToDTO = employeeRepository.getCountEmployeesByDepartment(departmentToDTO);
-//        InfoDTO infoDTO = new InfoDTO();
-//        infoDTO.setDepartmentName(departmentToDTO.getName());
-//        infoDTO.setFLPChief(chiefToDTO.getFirstname() + " " +
-//                chiefToDTO.getLastname() + " " + chiefToDTO.getPatronymic());
-//        infoDTO.setEmployeesCount(employeeCountToDTO);
-//        return departmentToDTO;
-//    }
+    @RequestMapping(value = "/getDepartmentByName", method = RequestMethod.GET)
+    public Department getDepartmentByUniqueName(@RequestBody Department department) {
+        return departmentRepository.findByName(department.getName());
+    }
+
+    @RequestMapping(value = "/getDepartmentByNamePart", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    public List<String> getDepartmentByPartName(@RequestBody Department department) {
+        return departmentRepository.findByPartName(department.getName());
+    }
 
 
 

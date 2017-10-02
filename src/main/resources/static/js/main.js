@@ -1,5 +1,6 @@
 'use strict';
 
+// ---------- DEPARTMENT ----------
 function createDepartment() {
     var departmentMaster =
         {
@@ -145,14 +146,15 @@ function getInfo(id) {
         });
 }
 
-function searchByName(name) {
+function searchByName(/*name*/) {
     var department =
         {
-            name: name
+            name: $("#department-name-search").val()
+            // name: name
         };
     var request = {
             type: "POST",
-            url: "/departments/searchByName",
+            url: "/departments/getDepartmentByNamePart",
             headers: {
                 'Accept': 'application/json;charset=UTF-8',
                 'Content-Type': 'application/json;charset=UTF-8'
@@ -164,6 +166,76 @@ function searchByName(name) {
     $.ajax(request)
         .success(function (json) {
             alert(json.toString());
+        })
+        .fail(function (response) {
+            alert("Error: " + response.responseJSON.message);
+        });
+}
+
+// ---------- EMPLOYEE ----------
+function createEmployee() {
+    var department =
+        {
+            id: $("#employee-department-create").val()
+        };
+    var job =
+        {
+            id: $("#employee-job-create").val()
+        };
+    var employee =
+        {
+            firstname: $("#employee-firstname-create").val(),
+            lastname: $("#employee-lastname-create").val(),
+            patronymic: $("#employee-patronymic-create").val(),
+            gender: $("#employee-gender-create").val(),
+            birthdate: $("#employee-birthdate-create").val(),
+            department: department,
+            hiredate: $("#employee-hiredate-create").val(),
+            dismissal: $("#employee-dismissal-create").val(),
+            job: job,
+            salary: $("#employee-salary-create").val(),
+            chief: ($("#employee-chief-create").is(":checked"))
+        }
+    var request = {
+            type: "POST",
+            url: "/employees/createEmployee",
+            headers: {
+                'Accept': 'application/json;charset=UTF-8',
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            data: JSON.stringify(employee)
+        }
+    ;
+    $.ajax(request)
+        .done(function () {
+            location.reload();
+            alert("Employee created");
+        })
+        .fail(function (response) {
+            location.reload();
+            alert("Error: " + response.responseJSON.message);
+        });
+}
+
+function deleteEmployee(id) {
+    var employee =
+        {
+            id: id
+        };
+    var request = {
+            type: "DELETE",
+            url: "/employees/deleteEmployee",
+            headers: {
+                'Accept': 'application/json;charset=UTF-8',
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            data: JSON.stringify(employee)
+        }
+    ;
+    $.ajax(request)
+        .done(function () {
+            location.reload();
+            alert("Department deleted");
         })
         .fail(function (response) {
             alert("Error: " + response.responseJSON.message);
