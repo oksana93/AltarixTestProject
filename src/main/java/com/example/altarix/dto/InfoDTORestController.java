@@ -47,7 +47,7 @@ public class InfoDTORestController {
 
         Integer employeeCountToDTO = employeeRepository.getCountEmployeesByDepartment(departmentToDTO);
 
-        Long sumSalary = employeeRepository.getSumSalaryByDepartment(departmentToDTO);
+        Integer sumSalary = employeeRepository.getSumSalaryByDepartment(departmentToDTO);
 
         InfoDTO infoDTO = new InfoDTO();
         infoDTO.setDepartmentName(departmentToDTO.getName());

@@ -18,8 +18,7 @@ public interface IEmployeeRepository extends PagingAndSortingRepository<Employee
     Integer getCountEmployeesByDepartment(@Param("department") Department department);
 
     @Query("SELECT sum(e.salary) FROM Employee e WHERE e.department=:department")
-    Long getSumSalaryByDepartment(@Param("department") Department department);
-
+    Integer getSumSalaryByDepartment(@Param("department") Department department);
 
     @Query("SELECT e FROM Employee e WHERE e.department=:department AND e.chief = true")
     Employee getEmployeeChiefByDepartmentId(@Param("department") Department department);

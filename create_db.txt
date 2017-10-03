@@ -10,8 +10,6 @@ CREATE SEQUENCE hibernate_sequence
 increment by 1
 start with 1;
 
-/** -------------------------------------------------------------- */
-
 CREATE TABLE jobs (
   id INT4 PRIMARY KEY,
   definition VARCHAR(200) NOT NULL
@@ -55,3 +53,47 @@ CREATE TABLE users (
   username VARCHAR(20) NOT NULL,
   password VARCHAR(20) NOT NULL
 );
+
+/** --------------------------------R1------------------------------ */
+create table timer_department_salary(
+  id INT4 PRIMARY KEY,
+  date TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  d_id INT4 NOT NULL,
+  salary INT4,
+  CONSTRAINT timer_dep FOREIGN KEY (d_id) REFERENCES departments ON DELETE CASCADE
+);
+/** --------------------------------R2------------------------------ */
+
+-- R11
+    -- drop table emp_change;
+
+    CREATE TABLE departments_change(
+      change_name VARCHAR(15),
+      change_data DATE
+    );
+
+    DROP FUNCTION trigger_start();
+
+    CREATE OR REPLACE FUNCTION trigger_start() RETURNS TRIGGER AS $$
+    BEGIN
+      IF TG_OP = 'INSERT'
+      THEN
+        INSERT INTO departments_change VALUES ('INSERT', current_timestamp);
+      END IF;
+      IF TG_OP = 'DELETE'
+      THEN
+        INSERT INTO departments_change VALUES ('DELETE', current_timestamp);
+      END IF;
+      IF TG_OP = 'UPDATE'
+      THEN
+        INSERT INTO departments_change VALUES ('UPDATE', current_timestamp);
+      END IF;
+      RETURN OLD;
+    END
+    $$
+    LANGUAGE plpgsql;
+
+    CREATE TRIGGER trigger_department
+AFTER DELETE OR UPDATE OR INSERT ON departments
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_start();

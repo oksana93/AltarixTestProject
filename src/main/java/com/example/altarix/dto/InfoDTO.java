@@ -16,7 +16,7 @@ public class InfoDTO {
 
     private Integer employeesCount;
 
-    private Long sumSalary;
+    private Integer sumSalary;
 
     private List<String> branchesFirstLevel;
 
