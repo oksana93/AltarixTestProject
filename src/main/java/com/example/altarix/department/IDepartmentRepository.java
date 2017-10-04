@@ -24,4 +24,5 @@ public interface IDepartmentRepository extends PagingAndSortingRepository<Depart
 
     @Query("SELECT d.name FROM Department d WHERE d.name LIKE CONCAT('%',:name,'%')")
     List<String> findByPartName(@Param("name")String name);
+
 }

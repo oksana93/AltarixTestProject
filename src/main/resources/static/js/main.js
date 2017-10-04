@@ -28,7 +28,7 @@ function createDepartment() {
             alert("Department created");
         })
         .fail(function (response) {
-            alert("Error: " + response.responseJSON.message);
+            alert("Error: " + response.message);
         });
 }
 
@@ -81,7 +81,7 @@ function updateDepartment() {
                 alert("Department updated");
             })
             .fail(function (response) {
-                alert("Error: " + response.responseJSON.message);
+                alert("Error: " + response.message);
             });
     }
     location.reload();
@@ -109,7 +109,7 @@ function deleteDepartment(id) {
             alert("Department deleted");
         })
         .fail(function (response) {
-            alert("Error: " + response.responseJSON.message);
+            alert("Error: " + response.message);
         });
 }
 
@@ -142,7 +142,7 @@ function getInfo(id) {
                 "\n\nMasters (all level) : " + json.mastersAllLevel);
         })
         .fail(function (response) {
-            alert("Error: " + response.responseJSON.message);
+            alert("Error: " + response.message);
         });
 }
 
@@ -168,7 +168,7 @@ function searchByName(/*name*/) {
             alert(json.toString());
         })
         .fail(function (response) {
-            alert("Error: " + response.responseJSON.message);
+            alert("Error: " + response.message);
         });
 }
 
@@ -213,7 +213,7 @@ function createEmployee() {
         })
         .fail(function (response) {
             location.reload();
-            alert("Error: " + response.responseJSON.message);
+            alert("Error: " + response.message);
         });
 }
 
@@ -238,7 +238,7 @@ function deleteEmployee(id) {
             alert("Employee deleted");
         })
         .fail(function (response) {
-            alert("Error: " + response.responseJSON.message);
+            alert("Error: " + response.message);
         });
 }
 
@@ -268,7 +268,7 @@ function dismissalEmployee(id) {
             alert("Employee are dismissed");
         })
         .fail(function (response) {
-            alert("Error: " + response.responseJSON.message);
+            alert("Error: " + response.message);
         });
 }
 
@@ -298,7 +298,7 @@ function transferEmployee() {
             alert("A successful relocation");
         })
         .fail(function (response) {
-            alert("Error: " + response.responseJSON.message);
+            alert("Error: " + response.message);
         });
 }
 
@@ -322,6 +322,30 @@ function transferEmployees() {
             alert("A successful relocation (all employees)");
         })
         .fail(function (response) {
-            alert("Error: " + response.responseJSON.message);
+            alert("Error: " + response.message);
+        });
+}
+
+function chiefByEmployeeId(id) {
+    var employee = {
+        id : id
+    }
+    var request = {
+            type: "POST",
+            url: "/employees/chiefByEmployeeId",
+            headers: {
+                'Accept': 'application/json;charset=UTF-8',
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            data: JSON.stringify(employee)
+        }
+    ;
+    $.ajax(request)
+        .success(function (json) {
+            alert("Department '" + json.departmentName +
+                "\n\nChief : " + json.chief);
+        })
+        .fail(function (response) {
+            alert("Error: " + response.message);
         });
 }

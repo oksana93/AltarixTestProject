@@ -25,6 +25,9 @@ public interface IEmployeeRepository extends PagingAndSortingRepository<Employee
     @Query("SELECT e FROM Employee e WHERE e.department=:department AND e.chief = true")
     Employee getEmployeeChiefByDepartmentId(@Param("department") Department department);
 
+    @Query("SELECT e1 FROM Employee e1, Employee e2 WHERE e1.department= e2.department AND e1.chief = true AND e2.id=:id")
+    Employee getChiefEmployeeByEmployeeDepartment(@Param("id") Integer id);
+
     @Transactional
     @Modifying
     @Query("UPDATE Employee e SET e=:employee WHERE e.id=:id")

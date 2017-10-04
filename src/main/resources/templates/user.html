@@ -110,6 +110,7 @@
                 <td>chief</td>
                 <td></td>
                 <td></td>
+                <td></td>
             </tr>
             <tr th:each="employee : ${employees}">
                 <td class="employee-id" th:text="${employee.id}"></td>
@@ -137,8 +138,15 @@
                             id="employee-id-dismissal"
                             th:value="${employee.id}"
                             th:text="Dismissal"
-                            th:title="info"
                             onclick="dismissalEmployee(this.value)"></button>
+                </td>
+                <td>
+                    <button class="btn btn-link"
+                            type="button"
+                            id="employee-id-for-info-chief"
+                            th:value="${employee.id}"
+                            th:text="Chief-info"
+                            onclick="chiefByEmployeeId(this.value)"></button>
                 </td>
             </tr>
         </table>
