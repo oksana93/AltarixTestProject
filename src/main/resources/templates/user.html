@@ -109,6 +109,7 @@
                 <td>salary</td>
                 <td>chief</td>
                 <td></td>
+                <td></td>
             </tr>
             <tr th:each="employee : ${employees}">
                 <td class="employee-id" th:text="${employee.id}"></td>
@@ -120,7 +121,7 @@
                 <td class="employee-date" th:text="${employee.hiredate}"></td>
                 <td class="employee-date" th:text="${employee.dismissal != 'null'? employee.dismissal: '-'}"></td>
                 <td class="employee-date" th:text="${employee.salary}"></td>
-                <td class="employee-date" th:text="${employee.chief == true? '-': 'chief'}"></td>
+                <td class="employee-date" th:text="${employee.chief == false? '-': 'chief'}"></td>
                 <td>
                     <button class="btn btn-link"
                             type="button"
@@ -129,6 +130,15 @@
                             th:text="Delete"
                             th:title="info"
                             onclick="deleteEmployee(this.value)"></button>
+                </td>
+                <td>
+                    <button class="btn btn-link"
+                            type="button"
+                            id="employee-id-dismissal"
+                            th:value="${employee.id}"
+                            th:text="Dismissal"
+                            th:title="info"
+                            onclick="dismissalEmployee(this.value)"></button>
                 </td>
             </tr>
         </table>
@@ -140,6 +150,14 @@
            href="#"
            data-toggle="modal"
            data-target="#updateEmployee">Update employee</a>
+        <a class="btn btn-primary"
+           href="#"
+           data-toggle="modal"
+           data-target="#transferEmployee">Transfer employee</a>
+        <a class="btn btn-primary"
+           href="#"
+           data-toggle="modal"
+           data-target="#transferEmployees">Transfer employees</a>
     </div>
 </div>
 
@@ -497,6 +515,111 @@
                         type="button"
                         onclick="createEmployee()"
                         th:text="Create"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--MODAl WINDOW-->
+<!-- Transfer Employee-->
+<div class="modal fade"
+     id="transferEmployee"
+     tabindex="-1"
+     role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close"
+                        type="button"
+                        data-dismiss="modal">x
+                </button>
+                <h4 class="modal-title">Transfer employee</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row ">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"
+                                  id="employee-id-transfer-span">Employee</span>
+                            <select id="employee-id-transfer"
+                                    type="date"
+                                    class="form-control"
+                                    required="required"
+                                    aria-describedby="employee-id-transfer-span">
+                                <option th:each="employee : ${employees}"
+                                        th:value="${employee.id}"
+                                        th:text="${employee.firstname + ' ' + employee.lastname + ' ' + employee.patronymic}"></option>
+                            </select>
+                            <span class="input-group-addon"
+                                  id="department-id-transfer-span">New department</span>
+                            <select id="department-id-transfer"
+                                    type="date"
+                                    class="form-control"
+                                    required="required"
+                                    aria-describedby="department-id-transfer-span">
+                                <option th:each="department : ${departments}"
+                                        th:value="${department.id}"
+                                        th:text="${department.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default"
+                        type="button"
+                        data-dismiss="modal"
+                        th:text="Cancel"></button>
+                <button class="btn btn-primary"
+                        type="button"
+                        onclick="transferEmployee()"
+                        th:text="Transfer"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--MODAl WINDOW-->
+<!-- Transfer Employees-->
+<div class="modal fade"
+     id="transferEmployees"
+     tabindex="-1"
+     role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close"
+                        type="button"
+                        data-dismiss="modal">x
+                </button>
+                <h4 class="modal-title">Transfer all employees</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row ">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"
+                                  id="department-id-transfer-employees-span">Department</span>
+                            <select id="department-id-transfer-employees"
+                                    type="date"
+                                    class="form-control"
+                                    required="required"
+                                    aria-describedby="department-id-transfer-employees-span">
+                                <option th:each="department : ${departments}"
+                                        th:value="${department.id}"
+                                        th:text="${department.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default"
+                        type="button"
+                        data-dismiss="modal"
+                        th:text="Cancel"></button>
+                <button class="btn btn-primary"
+                        type="button"
+                        onclick="transferEmployees()"
+                        th:text="Transfer"></button>
             </div>
         </div>
     </div>

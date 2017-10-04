@@ -133,13 +133,13 @@ function getInfo(id) {
     $.ajax(request)
         .success(function (json) {
             alert("Department '" + json.departmentName +
-                "' : , " + json.departmentDate +
-                ". \n\nChief : " + json.chief +
-                ". \n\nEmployees count : " + json.employeesCount +
-                ". \n\nSalary(sum) : " + json.sumSalary +
-                ". \n\nBranches (1 level) : " +json.branchesFirstLevel +
-                ". \n\nBranches (all level) : " +json.branchesAllLevel +
-                ". \n\nMasters (all level) : " +json.mastersAllLevel);
+                "' : " + json.departmentDate +
+                "\n\nChief : " + json.chief +
+                "\n\nEmployees count : " + json.employeesCount +
+                "\n\nSalary(sum) : " + json.sumSalary +
+                "\n\nBranches (1 level) : " + json.branchesFirstLevel +
+                "\n\nBranches (all level) : " + json.branchesAllLevel +
+                "\n\nMasters (all level) : " + json.mastersAllLevel);
         })
         .fail(function (response) {
             alert("Error: " + response.responseJSON.message);
@@ -235,7 +235,91 @@ function deleteEmployee(id) {
     $.ajax(request)
         .done(function () {
             location.reload();
-            alert("Department deleted");
+            alert("Employee deleted");
+        })
+        .fail(function (response) {
+            alert("Error: " + response.responseJSON.message);
+        });
+}
+
+function dismissalEmployee(id) {
+    var current_date = new Date();
+    var dismissalStr = prompt('Dismissal date', current_date.getFullYear() + "-" + current_date.getMonth() + "-" + current_date.getDate());
+    if (dismissalStr == null) return;
+    var dismissal = new Date(dismissalStr);
+    var employee =
+        {
+            id: id,
+            dismissal: dismissal
+        };
+    var request = {
+            type: "POST",
+            url: "/employees/dismissalEmployee",
+            headers: {
+                'Accept': 'application/json;charset=UTF-8',
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            data: JSON.stringify(employee)
+        }
+    ;
+    $.ajax(request)
+        .done(function () {
+            location.reload();
+            alert("Employee are dismissed");
+        })
+        .fail(function (response) {
+            alert("Error: " + response.responseJSON.message);
+        });
+}
+
+function transferEmployee() {
+    var department = {
+        id : $("#department-id-transfer").val()
+    }
+    var employee =
+        {
+            id : $("#employee-id-transfer").val(),
+            department: department
+
+        };
+    var request = {
+            type: "POST",
+            url: "/employees/transferEmployee",
+            headers: {
+                'Accept': 'application/json;charset=UTF-8',
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            data: JSON.stringify(employee)
+        }
+    ;
+    $.ajax(request)
+        .done(function () {
+            location.reload();
+            alert("A successful relocation");
+        })
+        .fail(function (response) {
+            alert("Error: " + response.responseJSON.message);
+        });
+}
+
+function transferEmployees() {
+    var department = {
+        id : $("#department-id-transfer-employees").val()
+    }
+    var request = {
+            type: "POST",
+            url: "/employees/transferEmployees",
+            headers: {
+                'Accept': 'application/json;charset=UTF-8',
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            data: JSON.stringify(department)
+        }
+    ;
+    $.ajax(request)
+        .done(function () {
+            location.reload();
+            alert("A successful relocation (all employees)");
         })
         .fail(function (response) {
             alert("Error: " + response.responseJSON.message);

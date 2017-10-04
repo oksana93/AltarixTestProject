@@ -1,5 +1,7 @@
 package com.example.altarix.employee;
 
+import com.example.altarix.department.Department;
+import com.example.altarix.department.IDepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +16,12 @@ import java.util.List;
 public class EmployeeRestController {
 
     private final IEmployeeRepository employeeRepository;
+    private final IDepartmentRepository departmentRepository;
 
     @Autowired
-    public EmployeeRestController(IEmployeeRepository employeeRepository) {
+    public EmployeeRestController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository) {
         this.employeeRepository = employeeRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     @RequestMapping(value = "/getAllEmployees", method = RequestMethod.GET)
@@ -48,5 +52,21 @@ public class EmployeeRestController {
         if (oldEmployee == null)
             throw new RuntimeException("The employee does not exist");
         employeeRepository.delete(employee);
+    }
+
+    @RequestMapping(value = "/transferEmployee", method = RequestMethod.POST)
+    public void transferEmployee(@RequestBody Employee employee) {
+        Employee oldEmployee = employeeRepository.findOne(employee.getId());
+        if (oldEmployee == null)
+            throw new RuntimeException("The employee does not exist");
+        oldEmployee.setDepartment(employee.getDepartment());
+        employeeRepository.updateEmployee(employee, employee.getId());
+    }
+
+
+    @RequestMapping(value = "/transferEmployees", method = RequestMethod.POST)
+    public void transferEmployees(@RequestBody Department department) {
+        department = departmentRepository.findOne(department.getId());
+        employeeRepository.transferEmployees(department);
     }
 }
